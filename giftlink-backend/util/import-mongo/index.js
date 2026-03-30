@@ -3,7 +3,12 @@ const MongoClient = require('mongodb').MongoClient;
 const fs = require('fs');
 
 // MongoDB connection URL with authentication options
-let url = `${process.env.MONGO_URL}`;
+// let url = `${process.env.MONGO_URL}`;
+let url = "mongodb://root:jPeU4bxGlNgePj1d8aPJRdXm@172.21.212.239:27017/giftdb?authSource=admin";
+
+if (!url || !url.startsWith("mongodb")) {
+    throw new Error("Invalid or missing MONGO_URL environment variable");
+}
 let filename = `${__dirname}/gifts.json`;
 const dbName = 'giftdb';
 const collectionName = 'gifts';
@@ -14,6 +19,7 @@ const data = JSON.parse(fs.readFileSync(filename, 'utf8')).docs;
 // connect to database and insert data into the collection
 async function loadData() {
     const client = new MongoClient(url);
+    // console.log("MONGO_URL =", process.env.MONGO_URL);
 
     try {
         // Connect to the MongoDB client
